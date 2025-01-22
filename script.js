@@ -4,6 +4,21 @@ const SHEET_ID = "1DV4wXnq7Ftcq1lPzpWxBbNK028nMCotMgkkzCYo9IoI"; // Replace with
 // Markdown Converter
 const converter = new showdown.Converter();
 
+// Utility function to ensure links open in a new tab
+function processLinks(html) {
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = html;
+
+  // Select all anchor tags and set target="_blank"
+  const links = tempDiv.querySelectorAll("a");
+  links.forEach(link => {
+    link.setAttribute("target", "_blank");
+    link.setAttribute("rel", "noopener noreferrer"); // Security enhancement
+  });
+
+  return tempDiv.innerHTML;
+}
+
 // Fetch data from Google Sheets API
 async function fetchData() {
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?key=${API_KEY}&includeGridData=true`;
@@ -34,7 +49,7 @@ function populateIntro(sheet) {
     const cell = row.values && row.values[0]; // First cell in the row
     if (cell && cell.formattedValue) {
       const markdownContent = converter.makeHtml(cell.formattedValue); // Convert Markdown to HTML
-      introContent.innerHTML += markdownContent; // Append converted HTML
+      introContent.innerHTML += processLinks(markdownContent); // Ensure links open in a new tab
     }
   });
 }
@@ -61,7 +76,7 @@ function populateDynamicSections(sheets) {
       if (cell && cell.formattedValue) {
         const listItem = document.createElement("li");
         const markdownContent = converter.makeHtml(cell.formattedValue); // Convert Markdown to HTML
-        listItem.innerHTML = markdownContent; // Add converted HTML
+        listItem.innerHTML = processLinks(markdownContent); // Ensure links open in a new tab
         list.appendChild(listItem);
       }
     });
