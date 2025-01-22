@@ -1,0 +1,131 @@
+/* Global Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #F8F8F8; /* Off-white */
+  color: #000000; /* Black Text */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure body height covers the entire viewport */
+}
+
+/* Header */
+header {
+  background-color: #CB202D; /* Red */
+  color: #FFFFFF;
+  text-align: center;
+  padding: 40px 0;
+  font-size: 1.8rem;
+}
+
+/* Footer */
+footer {
+  background-color: #CB202D; /* Red */
+  color: #FFFFFF;
+  text-align: center;
+  padding: 20px 0;
+  width: 100%;
+}
+
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-icon {
+  width: 50px;
+  height: 50px;
+  background-color: #FFFFFF;
+  color: #CB202D; /* Red Icon */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: transform 0.3s, background-color 0.3s, color 0.3s;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Button shadow */
+}
+
+.social-icon:hover {
+  background-color: #E54450; /* Slightly lighter red */
+  color: #FFFFFF; /* White icon */
+  transform: scale(1.1); /* Slight enlargement */
+}
+
+/* Container */
+.container {
+  display: flex;
+  flex-grow: 1; /* Ensure the container expands to fill available space */
+  width: 100%;
+}
+
+/* Sidebar (Left Panel) */
+.sidebar {
+  width: 20%; /* Adjusted for profile and intro */
+  background-color: rgba(203, 32, 45, 0.1); /* Light Red Tint */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  position: relative; /* Ensures the profile picture respects relative positioning */
+}
+
+.profile-container {
+  position: relative;
+  margin-top: -60px; /* Pulls the profile picture upwards to overlap header */
+  z-index: 2; /* Ensure it appears above the header */
+}
+
+.profile-pic {
+  width: 95%;
+  border-radius: 50%;
+  border: 5px solid #FFFFFF; /* White Border */
+  transition: transform 0.3s;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
+  transform-origin: center; /* Scale from the center */
+}
+
+.profile-pic:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.about {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.about p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #000000; /* Black Text */
+}
+
+/* Content (Right Panel) */
+.content {
+  width: 80%; /* Adjusted for larger sidebar */
+  padding: 30px;
+  background-color: #F8F8F8; /* Off-white */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+section {
+  margin-bottom: 40px;
+  padding: 20px;
+  background-color: #FFFFFF; /* White Background */
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-bottom: 10px;
+  color: #CB202D; /* Red for Section Titles */
+}
+
+p, ul {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #000000; /* Black Text */
+}
