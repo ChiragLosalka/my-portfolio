@@ -1,6 +1,9 @@
 const API_KEY = "AIzaSyCnS5_RVtWCCJU_cWiTBU89L_qTKONR96Q"; // Replace with your actual API Key
 const SHEET_ID = "1DV4wXnq7Ftcq1lPzpWxBbNK028nMCotMgkkzCYo9IoI"; // Replace with your Sheet ID
 
+// Markdown Converter
+const converter = new showdown.Converter();
+
 // Fetch data from Google Sheets API
 async function fetchData() {
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?key=${API_KEY}&includeGridData=true`;
@@ -21,7 +24,7 @@ async function fetchData() {
   }
 }
 
-// Populate the Intro section (first sheet)
+// Populate the Intro section (first sheet) with Markdown support
 function populateIntro(sheet) {
   const introContent = document.querySelector("#about-content");
   const rows = sheet.data[0].rowData || [];
@@ -30,14 +33,13 @@ function populateIntro(sheet) {
   rows.forEach(row => {
     const cell = row.values && row.values[0]; // First cell in the row
     if (cell && cell.formattedValue) {
-      const paragraph = document.createElement("p");
-      paragraph.textContent = cell.formattedValue; // Add content as a paragraph
-      introContent.appendChild(paragraph);
+      const markdownContent = converter.makeHtml(cell.formattedValue); // Convert Markdown to HTML
+      introContent.innerHTML += markdownContent; // Append converted HTML
     }
   });
 }
 
-// Populate dynamic sections (all sheets starting from the second one)
+// Populate dynamic sections (all sheets starting from the second one) with Markdown support
 function populateDynamicSections(sheets) {
   const contentContainer = document.getElementById("dynamic-content");
   contentContainer.innerHTML = ""; // Clear existing content
@@ -58,7 +60,8 @@ function populateDynamicSections(sheets) {
       const cell = row.values && row.values[0]; // Get the first cell in each row
       if (cell && cell.formattedValue) {
         const listItem = document.createElement("li");
-        listItem.textContent = cell.formattedValue;
+        const markdownContent = converter.makeHtml(cell.formattedValue); // Convert Markdown to HTML
+        listItem.innerHTML = markdownContent; // Add converted HTML
         list.appendChild(listItem);
       }
     });
