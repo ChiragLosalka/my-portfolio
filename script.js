@@ -3,41 +3,69 @@ const SHEET_ID = "1DV4wXnq7Ftcq1lPzpWxBbNK028nMCotMgkkzCYo9IoI"; // Replace with
 
 // Fetch data from Google Sheets API
 async function fetchData() {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values:batchGet?ranges=About&ranges=OutsideWork&ranges=WhitePapers&ranges=Books&key=${API_KEY}`;
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?key=${API_KEY}&includeGridData=true`;
   try {
     const response = await fetch(url);
     const data = await response.json();
 
-    // Populate About section
-    const aboutData = data.valueRanges[0].values;
-    document.querySelector("#about-content").textContent = aboutData[1][1];
+    // Extract all sheets
+    const sheets = data.sheets;
 
-    // Populate Outside Work section
-    const workData = data.valueRanges[1].values;
-    document.querySelector("#work-content").textContent = workData[1][1];
+    // Populate Intro (About Me) section
+    populateIntro(sheets[0]); // First sheet is Intro
 
-    // Populate White Papers section
-    const papersData = data.valueRanges[2].values.slice(1); // Skip header
-    const papersList = document.querySelector("#white-papers-list");
-    papersList.innerHTML = ""; // Clear existing data
-    papersData.forEach(row => {
-      const listItem = document.createElement("li");
-      listItem.textContent = `${row[0]}: ${row[1]}`;
-      papersList.appendChild(listItem);
-    });
-
-    // Populate Books section
-    const booksData = data.valueRanges[3].values.slice(1); // Skip header
-    const booksList = document.querySelector("#books-list");
-    booksList.innerHTML = ""; // Clear existing data
-    booksData.forEach(row => {
-      const listItem = document.createElement("li");
-      listItem.textContent = `${row[0]} by ${row[1]}`;
-      booksList.appendChild(listItem);
-    });
+    // Populate right panel with all sheets starting from the second one
+    populateDynamicSections(sheets.slice(1)); // Remaining sheets
   } catch (error) {
     console.error("Error fetching data from Google Sheets:", error);
   }
+}
+
+// Populate the Intro section (first sheet)
+function populateIntro(sheet) {
+  const introContent = document.querySelector("#about-content");
+  const rows = sheet.data[0].rowData || [];
+
+  introContent.innerHTML = ""; // Clear existing content
+  rows.forEach(row => {
+    const cell = row.values && row.values[0]; // First cell in the row
+    if (cell && cell.formattedValue) {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = cell.formattedValue; // Add content as a paragraph
+      introContent.appendChild(paragraph);
+    }
+  });
+}
+
+// Populate dynamic sections (all sheets starting from the second one)
+function populateDynamicSections(sheets) {
+  const contentContainer = document.getElementById("dynamic-content");
+  contentContainer.innerHTML = ""; // Clear existing content
+
+  sheets.forEach(sheet => {
+    const sectionTitle = sheet.properties.title; // Tab name as section title
+    const rows = sheet.data[0].rowData || []; // Rows in the tab
+
+    // Create section
+    const section = document.createElement("section");
+    section.id = sectionTitle.toLowerCase().replace(/\s+/g, "-"); // Convert title to an ID
+    section.innerHTML = `<h2>${sectionTitle}</h2>`;
+
+    // Create a list for points
+    const list = document.createElement("ul");
+
+    rows.forEach(row => {
+      const cell = row.values && row.values[0]; // Get the first cell in each row
+      if (cell && cell.formattedValue) {
+        const listItem = document.createElement("li");
+        listItem.textContent = cell.formattedValue;
+        list.appendChild(listItem);
+      }
+    });
+
+    section.appendChild(list);
+    contentContainer.appendChild(section);
+  });
 }
 
 // Fetch data on page load
