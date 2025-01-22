@@ -8,6 +8,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* Ensure body height covers the entire viewport */
+  box-sizing: border-box; /* Include padding and border in element width/height */
 }
 
 /* Header */
@@ -17,6 +18,9 @@ header {
   text-align: center;
   padding: 40px 0;
   font-size: 1.8rem;
+  width: 100%; /* Ensure header spans full width */
+  margin: 0; /* Remove default margin */
+  box-sizing: border-box; /* Include padding in the width */
 }
 
 /* Footer */
@@ -26,6 +30,7 @@ footer {
   text-align: center;
   padding: 20px 0;
   width: 100%;
+  box-sizing: border-box; /* Ensure padding fits within width */
 }
 
 .social-buttons {
@@ -128,4 +133,38 @@ p, ul {
   font-size: 1.2rem;
   line-height: 1.5;
   color: #000000; /* Black Text */
+}
+
+/* Mobile View: Portrait (Vertical Mode) */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  .container {
+    flex-direction: column; /* Stack panels vertically */
+  }
+
+  .sidebar, .content {
+    width: 100%; /* Panels take full width */
+  }
+
+  .sidebar {
+    margin-bottom: 20px; /* Add spacing between panels */
+  }
+
+  header {
+    padding: 20px 0; /* Reduce padding for smaller screens */
+  }
+}
+
+/* Mobile View: Landscape (Horizontal Mode) */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .container {
+    flex-direction: row; /* Keep default row layout */
+  }
+
+  .sidebar {
+    width: 20%; /* Default width */
+  }
+
+  .content {
+    width: 80%; /* Default width */
+  }
 }
